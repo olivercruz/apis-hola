@@ -1,0 +1,75 @@
+buildscript {
+	ext {
+		springBootVersion = '1.5.16.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+ext {
+	springCloudVersion = 'Edgware.SR2'
+}
+
+apply plugin: 'war'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+
+apply plugin: 'maven'
+
+war {
+	archiveName = 'apis-hola.war'
+}
+
+group = 'mx.com.telefonica.apis'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+	mavenLocal()
+	maven {
+		name 'Spring'	
+      	url "https://plugins.gradle.org/m2/"
+    }
+}
+
+sourceSets {
+	main {
+		output.resourcesDir = "build/classes"
+	}
+}
+
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter-actuator')
+	compile('org.springframework.boot:spring-boot-starter-web')
+	compile("org.springframework.ws:spring-ws-core")
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+ext['log4j2.version'] = '2.15.0'
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+task writeNewPom doLast {
+    pom {
+        project {
+            inceptionYear '2014'
+            licenses {
+                license {
+                    name 'The Apache Software License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution 'repo'
+                }
+            }
+        }
+    }.writeTo("pom.xml")
+}
