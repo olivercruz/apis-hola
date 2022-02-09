@@ -18,14 +18,17 @@ public class HolaController {
 	@Autowired
 	private Environment env;
 
+	private int contador = 0;
+
 	@GetMapping("/hola")
 	@CrossOrigin
 	public String getHola() {
 		logger.info("++ IMPRIMIENDO MENSAJE +++");
 		String mensaje = null;
+		contador ++;
 
 		mensaje = env.getProperty("SPRING_MENSAJE");
-		logger.info(" ++ MENSAJE +++ --> " + mensaje);
+		logger.info(" ++ MENSAJE +++ --> " + mensaje + " NUMERO " + contador);
 
 		return "Hola Prueba";
 	}
